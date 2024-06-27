@@ -4,28 +4,41 @@
 //
 //  Created by William Rule on 6/26/24.
 //
-
 import SwiftUI
-
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
+        ZStack {
+            CameraView()
+                .edgesIgnoringSafeArea(.all)
+            
             VStack {
-                Text("this is another V stack")
-                HStack {
-                    Text("This is an hstack within the 2nd v stack")
-                    Text("And this is another element in that hstack")
+                Spacer()
+                
+                RoundedRectangle(cornerRadius: 20)
+                    .aspectRatio(4/3, contentMode: .fit)
+                    .overlay(CameraView())
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding()
+                    .background(Color.black.opacity(0.8))
+                
+                Spacer()
+                
+                Button(action: {
+                    // Shutter button action
+                }) {
+                    Circle()
+                        .frame(width: 70, height: 70)
+                        .foregroundColor(.white)
+                        .overlay(Circle().stroke(Color.black, lineWidth: 2))
+                        .padding(.bottom, 30)
                 }
             }
-            Text("Hello, Hi!")
         }
-        .padding()
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
