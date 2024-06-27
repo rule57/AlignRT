@@ -6,25 +6,41 @@
 //
 import SwiftUI
 struct ContentView: View {
+    @State private var capturedImage: UIImage? = nil
+    @State private var showCapturedImage: Bool = false
+    
     var body: some View {
         ZStack {
-            CameraView()
+            CameraView(capturedImage: $capturedImage)
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
                 Spacer()
                 
-                RoundedRectangle(cornerRadius: 20)
-                    .aspectRatio(4/3, contentMode: .fit)
-                    .overlay(CameraView())
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .padding()
-                    .background(Color.black.opacity(0.8))
+                ZStack {
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                    
+                    RoundedRectangle(cornerRadius: 20)
+                        .aspectRatio(4/3, contentMode: .fit)
+                        .foregroundColor(.clear)
+                        .background(Color.black)
+                        .blendMode(.destinationOut)
+                        .padding()
+                    
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.white, lineWidth: 2)
+                        .aspectRatio(4/3, contentMode: .fit)
+                        .padding()
+                }
+                .compositingGroup()
                 
                 Spacer()
                 
                 Button(action: {
-                    // Shutter button action
+                    let cameraController = CameraViewController()
+                    cameraController.capturePhoto()
+                    showCapturedImage.toggle()
                 }) {
                     Circle()
                         .frame(width: 70, height: 70)
@@ -34,8 +50,18 @@ struct ContentView: View {
                 }
             }
         }
+        .sheet(isPresented: $showCapturedImage) {
+            if let image = capturedImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+            } else {
+                Text("No image captured")
+            }
+        }
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
