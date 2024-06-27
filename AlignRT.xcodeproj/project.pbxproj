@@ -20,6 +20,7 @@
 		24918A952C2CE5DE000EE644 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 24918A942C2CE5DE000EE644 /* FirebaseAuth */; };
 		24918A972C2CE5DE000EE644 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 24918A962C2CE5DE000EE644 /* FirebaseFunctions */; };
 		24918A9F2C2CF910000EE644 /* SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */; };
+		24918AA52C2DD800000EE644 /* CameraViewControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918AA42C2DD7FA000EE644 /* CameraViewControllerWrapper.swift */; };
 		42ADF2CD2C2D02F200420265 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 42ADF2CC2C2D02F200420265 /* FirebaseStorage */; };
 		42F685512C2CF708008A0D25 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F685502C2CF708008A0D25 /* CameraViewController.swift */; };
 /* End PBXBuildFile section */
@@ -56,6 +57,7 @@
 		24918A8F2C2CE58F000EE644 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
 		24918AA32C2DC3E0000EE644 /* AlignRT.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AlignRT.entitlements; sourceTree = "<group>"; };
+		24918AA42C2DD7FA000EE644 /* CameraViewControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewControllerWrapper.swift; sourceTree = "<group>"; };
 		42F685502C2CF708008A0D25 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +118,7 @@
 				24918A552C2CE1E7000EE644 /* AlignRTApp.swift */,
 				24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */,
 				24918A572C2CE1E7000EE644 /* ContentView.swift */,
+				24918AA42C2DD7FA000EE644 /* CameraViewControllerWrapper.swift */,
 				42F685502C2CF708008A0D25 /* CameraViewController.swift */,
 				24918A8F2C2CE58F000EE644 /* GoogleService-Info.plist */,
 				24918A7F2C2CE311000EE644 /* SignInView.swift */,
@@ -302,6 +305,7 @@
 				42F685512C2CF708008A0D25 /* CameraViewController.swift in Sources */,
 				24918A582C2CE1E7000EE644 /* ContentView.swift in Sources */,
 				24918A562C2CE1E7000EE644 /* AlignRTApp.swift in Sources */,
+				24918AA52C2DD800000EE644 /* CameraViewControllerWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

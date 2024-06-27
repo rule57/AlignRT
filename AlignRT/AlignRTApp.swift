@@ -6,22 +6,12 @@
 //
 
 import SwiftUI
-import FirebaseCore
 import Firebase
-
-class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-
-    return true
-  }
-}
 
 @main
 struct AlignRTApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var body: some Scene {
         WindowGroup {
             SignInWithAppleView()
@@ -29,5 +19,9 @@ struct AlignRTApp: App {
     }
 }
 
-
-
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
+        return true
+    }
+}

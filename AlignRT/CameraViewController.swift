@@ -1,7 +1,6 @@
 import UIKit
 import FirebaseStorage
 
-
 class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var imagePicker: UIImagePickerController!
 
@@ -60,9 +59,6 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
 
     private func saveImageURLToDatabase(_ url: URL) {
         // Add your code here to save the URL to your database
-        // For example:
-        // let photo = Photo(userId: currentUser.id, fileName: fileName, fileUrl: url.absoluteString)
-        // DatabaseManager.shared.savePhoto(photo)
         print("Saved image URL to database: \(url.absoluteString)")
     }
 
