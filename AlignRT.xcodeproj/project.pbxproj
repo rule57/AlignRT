@@ -20,6 +20,7 @@
 		24918A952C2CE5DE000EE644 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 24918A942C2CE5DE000EE644 /* FirebaseAuth */; };
 		24918A972C2CE5DE000EE644 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 24918A962C2CE5DE000EE644 /* FirebaseFunctions */; };
 		24918A9F2C2CF910000EE644 /* SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */; };
+		42ADF2CD2C2D02F200420265 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 42ADF2CC2C2D02F200420265 /* FirebaseStorage */; };
 		42F685512C2CF708008A0D25 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F685502C2CF708008A0D25 /* CameraViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24918A972C2CE5DE000EE644 /* FirebaseFunctions in Frameworks */,
+				42ADF2CD2C2D02F200420265 /* FirebaseStorage in Frameworks */,
 				24918A932C2CE5DE000EE644 /* FirebaseAnalytics in Frameworks */,
 				24918A952C2CE5DE000EE644 /* FirebaseAuth in Frameworks */,
 			);
@@ -92,6 +94,7 @@
 				24918A652C2CE1E9000EE644 /* AlignRTTests */,
 				24918A6F2C2CE1E9000EE644 /* AlignRTUITests */,
 				24918A532C2CE1E7000EE644 /* Products */,
+				42F685522C2D0109008A0D25 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -145,6 +148,13 @@
 			path = AlignRTUITests;
 			sourceTree = "<group>";
 		};
+		42F685522C2D0109008A0D25 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -165,6 +175,7 @@
 				24918A922C2CE5DE000EE644 /* FirebaseAnalytics */,
 				24918A942C2CE5DE000EE644 /* FirebaseAuth */,
 				24918A962C2CE5DE000EE644 /* FirebaseFunctions */,
+				42ADF2CC2C2D02F200420265 /* FirebaseStorage */,
 			);
 			productName = AlignRT;
 			productReference = 24918A522C2CE1E7000EE644 /* AlignRT.app */;
@@ -645,6 +656,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 24918A912C2CE5DE000EE644 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFunctions;
+		};
+		42ADF2CC2C2D02F200420265 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24918A912C2CE5DE000EE644 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

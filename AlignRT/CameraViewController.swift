@@ -1,94 +1,55 @@
-import SwiftUI
-import AVFoundation
+import UIKit
+import FirebaseStorage
 
-class CameraViewController: UIViewController, AVCapturePhotoCaptureDelegate {
-    var captureSession: AVCaptureSession?
-    var previewLayer: AVCaptureVideoPreviewLayer?
-    var photoOutput: AVCapturePhotoOutput?
-    var capturedImage: ((UIImage?) -> Void)?
+class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    var imagePicker: UIImagePickerController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCamera()
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .camera
+        imagePicker.allowsEditing = false
     }
-    
-    private func setupCamera() {
-        captureSession = AVCaptureSession()
-        guard let captureSession = captureSession else { return }
-        
-        captureSession.sessionPreset = .photo
-        
-        guard let backCamera = AVCaptureDevice.default(for: .video) else { return }
-        do {
-            let input = try AVCaptureDeviceInput(device: backCamera)
-            if captureSession.canAddInput(input) {
-                captureSession.addInput(input)
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        present(imagePicker, animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let capturedImage = info[.originalImage] as? UIImage {
+            uploadImageToFirebase(image: capturedImage)
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+
+    func uploadImageToFirebase(image: UIImage) {
+        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+            print("Error: Could not convert image to data")
+            return
+        }
+
+        let storageRef = Storage.storage().reference().child("images/\(UUID().uuidString).jpg")
+        storageRef.putData(imageData, metadata: nil) { [weak self] (metadata, error) in
+            guard error == nil else {
+                print("Error uploading image: \(error!.localizedDescription)")
+                return
             }
-        } catch {
-            print("Error: Unable to initialize back camera: \(error.localizedDescription)")
-            return
-        }
-        
-        photoOutput = AVCapturePhotoOutput()
-        if captureSession.canAddOutput(photoOutput!) {
-            captureSession.addOutput(photoOutput!)
-        }
-        
-        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer?.videoGravity = .resizeAspectFill
-        if let previewLayer = previewLayer {
-            view.layer.addSublayer(previewLayer)
-            previewLayer.frame = view.frame
-            previewLayer.connection?.videoOrientation = .portrait
-        }
-        
-        captureSession.startRunning()
-    }
-    
-    func capturePhoto() {
-        let settings = AVCapturePhotoSettings()
-        photoOutput?.capturePhoto(with: settings, delegate: self)
-    }
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        if let error = error {
-            print("Error capturing photo: \(error)")
-            capturedImage?(nil)
-            return
-        }
-        
-        guard let imageData = photo.fileDataRepresentation() else {
-            capturedImage?(nil)
-            return
-        }
-        
-        let image = UIImage(data: imageData)
-        capturedImage?(image)
-    }
-}
 
-struct CameraView: UIViewControllerRepresentable {
-    @Binding var capturedImage: UIImage?
-
-    func makeUIViewController(context: Context) -> CameraViewController {
-        let cameraViewController = CameraViewController()
-        cameraViewController.capturedImage = { image in
-            self.capturedImage = image
-        }
-        return cameraViewController
-    }
-    
-    func updateUIViewController(_ uiViewController: CameraViewController, context: Context) {}
-    
-    class Coordinator: NSObject {
-        var parent: CameraView
-
-        init(parent: CameraView) {
-            self.parent = parent
+            storageRef.downloadURL { [weak self] (url, error) in
+                guard let self = self else { return }
+                guard let downloadURL = url else {
+                    print("Error getting download URL: \(error!.localizedDescription)")
+                    return
+                }
+                print("Image uploaded successfully: \(downloadURL.absoluteString)")
+                // Save the URL or perform any other necessary actions
+            }
         }
     }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(parent: self)
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
 }
