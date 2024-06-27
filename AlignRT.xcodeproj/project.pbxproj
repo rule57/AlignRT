@@ -19,6 +19,7 @@
 		24918A932C2CE5DE000EE644 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 24918A922C2CE5DE000EE644 /* FirebaseAnalytics */; };
 		24918A952C2CE5DE000EE644 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 24918A942C2CE5DE000EE644 /* FirebaseAuth */; };
 		24918A972C2CE5DE000EE644 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 24918A962C2CE5DE000EE644 /* FirebaseFunctions */; };
+		24918A9F2C2CF910000EE644 /* SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */; };
 		42F685512C2CF708008A0D25 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F685502C2CF708008A0D25 /* CameraViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +53,7 @@
 		24918A722C2CE1E9000EE644 /* AlignRTUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignRTUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		24918A7F2C2CE311000EE644 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		24918A8F2C2CE58F000EE644 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
 		42F685502C2CF708008A0D25 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				24918A552C2CE1E7000EE644 /* AlignRTApp.swift */,
+				24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */,
 				24918A572C2CE1E7000EE644 /* ContentView.swift */,
 				42F685502C2CF708008A0D25 /* CameraViewController.swift */,
 				24918A8F2C2CE58F000EE644 /* GoogleService-Info.plist */,
@@ -282,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24918A802C2CE314000EE644 /* SignInView.swift in Sources */,
+				24918A9F2C2CF910000EE644 /* SignInWithAppleView.swift in Sources */,
 				42F685512C2CF708008A0D25 /* CameraViewController.swift in Sources */,
 				24918A582C2CE1E7000EE644 /* ContentView.swift in Sources */,
 				24918A562C2CE1E7000EE644 /* AlignRTApp.swift in Sources */,
@@ -373,6 +377,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = PP;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -430,6 +435,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = PP;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
