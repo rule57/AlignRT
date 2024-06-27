@@ -55,6 +55,7 @@
 		24918A7F2C2CE311000EE644 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		24918A8F2C2CE58F000EE644 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
+		24918AA32C2DC3E0000EE644 /* AlignRT.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AlignRT.entitlements; sourceTree = "<group>"; };
 		42F685502C2CF708008A0D25 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +112,7 @@
 		24918A542C2CE1E7000EE644 /* AlignRT */ = {
 			isa = PBXGroup;
 			children = (
+				24918AA32C2DC3E0000EE644 /* AlignRT.entitlements */,
 				24918A552C2CE1E7000EE644 /* AlignRTApp.swift */,
 				24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */,
 				24918A572C2CE1E7000EE644 /* ContentView.swift */,
@@ -462,6 +464,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AlignRT/AlignRT.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AlignRT/Preview Content\"";
@@ -492,6 +495,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AlignRT/AlignRT.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AlignRT/Preview Content\"";

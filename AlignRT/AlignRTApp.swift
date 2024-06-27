@@ -24,7 +24,10 @@ struct AlignRTApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SignInWithAppleView()
         }
     }
 }
+
+
+

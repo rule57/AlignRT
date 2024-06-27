@@ -37,7 +37,7 @@ struct SignInWithAppleView: View {
             .frame(width: 280, height: 45)
         }
         .fullScreenCover(isPresented: $isAuthenticated) {
-            ContentView()
+            CameraViewController()
         }
     }
 
