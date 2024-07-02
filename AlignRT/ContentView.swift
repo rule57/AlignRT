@@ -50,44 +50,46 @@ struct ContentView: View {
                 CameraViewWrapper()
                     .edgesIgnoringSafeArea(.all)
             } else {
-                //                SignInWithAppleView(isAuthenticated: $isAuthenticated)
-                CameraViewWrapper()
-                    .edgesIgnoringSafeArea(.all)
+                SignInWithAppleView(isAuthenticated: $isAuthenticated)
+                
             }
         }
     }
 }
 struct CameraViewWrapper: View {
+    @StateObject var viewModel = CameraViewModel()
     @State private var isButtonPressed = false
-
+    @State private var showingPreview = false
+    
+    
     var body: some View {
         ZStack {
-            CameraView()
+            CameraView(viewModel: viewModel)
                 .edgesIgnoringSafeArea(.all)
-
+            
             Image("CameraPreviewBackground1")
                 .resizable()
                 .opacity(0.6)
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
-
+            
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
-
+                    
                     ZStack {
                         Circle()
                             .fill(isButtonPressed ? Color.white.opacity(0.1) : Color.white.opacity(0.3))
                             .frame(width: 90, height: 90)
                             .animation(.easeInOut(duration: 0.1), value: isButtonPressed)
-
+                        
                         Circle()
                             .stroke(Color.white, lineWidth: 4)
                             .frame(width: 85, height: 85)
                             .scaleEffect(isButtonPressed ? 0.9 : 1.0)
                             .animation(.easeInOut(duration: 0.1), value: isButtonPressed)
-
+                        
                         Circle()
                             .fill(isButtonPressed ? Color.white.opacity(0.3) : Color.white.opacity(0.5))
                             .frame(width: 70, height: 70)
@@ -101,14 +103,15 @@ struct CameraViewWrapper: View {
                                         isButtonPressed = false
                                     }
                                     // Capture photo action
-                                    //capturePhoto()
+                                    viewModel.capturePhoto()
+                                    showingPreview = true
                                     print("Photo captured")
                                 }
                             }
                     }
                     
                     Spacer()// Adjust spacing as needed
-
+                    
                 }.padding(.bottom, 100)
                 
             }
@@ -131,11 +134,58 @@ struct CameraViewWrapper: View {
                     }
                     Spacer()
                 }.padding(.bottom, 110)
-                 // Adjust bottom padding to position the buttons
+                // Adjust bottom padding to position the buttons
             }
+        }
+        .sheet(isPresented: $showingPreview) {
+            if let capturedImage = viewModel.capturedImage {
+                PhotoPreviewView(image: capturedImage, onSave: {
+                    viewModel.savePhoto(capturedImage)
+                    showingPreview = false
+                }, onRetake: {
+                    showingPreview = false
+                    viewModel.startSession()
+                })
+            }
+        }
+        
+    }
+}
+
+struct PhotoPreviewView: View {
+    var image: UIImage
+    var onSave: () -> Void
+    var onRetake: () -> Void
+    
+    var body: some View {
+        VStack {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFit()
+                .edgesIgnoringSafeArea(.all)
+            
+            HStack {
+                Button(action: onSave) {
+                    Text("Save")
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                
+                Button(action: onRetake) {
+                    Text("Retake")
+                        .padding()
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+            }
+            .padding()
         }
     }
 }
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
