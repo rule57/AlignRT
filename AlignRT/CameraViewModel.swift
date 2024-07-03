@@ -4,9 +4,11 @@
 //
 //  Created by William Rule on 7/2/24.
 //
+
 import SwiftUI
 import AVFoundation
 import FirebaseStorage
+import FirebaseAuth
 
 class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
     @Published var capturedImage: UIImage?
@@ -56,8 +58,15 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
 
     func savePhoto(_ image: UIImage) {
         guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
+        
+        guard let user = Auth.auth().currentUser else {
+            print("No user is logged in")
+            return
+        }
+        
+        let userID = user.uid
         let fileName = UUID().uuidString + ".jpg"
-        let storageRef = Storage.storage().reference().child("images/\(fileName)")
+        let storageRef = Storage.storage().reference().child("users/\(userID)/images/\(fileName)")
 
         storageRef.putData(imageData, metadata: nil) { metadata, error in
             guard error == nil else {
@@ -84,13 +93,3 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
         }
     }
 }
-//
-//extension CameraViewModel: AVCapturePhotoCaptureDelegate {
-//    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-//        guard let imageData = photo.fileDataRepresentation(),
-//              let image = UIImage(data: imageData) else { return }
-//        DispatchQueue.main.async {
-//            self.capturedImage = image
-//        }
-//    }
-//}

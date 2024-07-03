@@ -3,42 +3,7 @@ import SwiftUI
 import FirebaseAuth
 import AuthenticationServices
 import CryptoKit
-//
-//struct ContentView: View {
-//    @State private var isAuthenticated = false
-//    @State private var showingAccountInfo = false
-//
-//    var body: some View {
-//        VStack {
-//            if isAuthenticated {
-//                ZStack {
-//                    CameraViewControllerWrapper(showingAccountInfo: $showingAccountInfo)
-//                        .edgesIgnoringSafeArea(.all)
-//
-//                    VStack {
-//                        Spacer()
-//                        Button(action: {
-//                            showingAccountInfo = true
-//                        }) {
-//                            Text("Account Information")
-//                                .padding()
-//                                .background(Color.blue)
-//                                .foregroundColor(.white)
-//                                .cornerRadius(10)
-//                        }
-//                        .padding(.bottom, 50)
-//                    }
-//                }
-//                .sheet(isPresented: $showingAccountInfo) {
-//                    AccountInfoView()
-//                }
-//            } else {
-//                SignInWithAppleView(isAuthenticated: $isAuthenticated)
-//            }
-//        }
-//    }
-//}
-//import SwiftUI
+
 
 struct ContentView: View {
     @State private var isAuthenticated = false
@@ -52,6 +17,11 @@ struct ContentView: View {
             } else {
                 SignInWithAppleView(isAuthenticated: $isAuthenticated)
                 
+            }
+        }
+        .onAppear {
+            if Auth.auth().currentUser != nil {
+                isAuthenticated = true
             }
         }
     }
@@ -137,7 +107,7 @@ struct CameraViewWrapper: View {
                 // Adjust bottom padding to position the buttons
             }
         }
-        .sheet(isPresented: $showingPreview) {
+        .sheet(isPresented: $showingPreview) {  //The presentation of this needs to change
             if let capturedImage = viewModel.capturedImage {
                 PhotoPreviewView(image: capturedImage, onSave: {
                     viewModel.savePhoto(capturedImage)
@@ -151,6 +121,7 @@ struct CameraViewWrapper: View {
         
     }
 }
+
 
 struct PhotoPreviewView: View {
     var image: UIImage
