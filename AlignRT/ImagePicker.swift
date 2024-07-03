@@ -1,10 +1,3 @@
-//
-//  ImagePicker.swift
-//  AlignRT
-//
-//  Created by William Rule on 7/1/24.
-//
-
 import SwiftUI
 import UIKit
 
@@ -24,6 +17,10 @@ struct ImagePicker: UIViewControllerRepresentable {
             }
             picker.dismiss(animated: true)
         }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            picker.dismiss(animated: true)
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -33,7 +30,6 @@ struct ImagePicker: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
-        picker.sourceType = .photoLibrary
         return picker
     }
 

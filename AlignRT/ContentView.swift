@@ -7,7 +7,6 @@ import CryptoKit
 
 struct ContentView: View {
     @State private var isAuthenticated = false
-    @State private var showingAccountInfo = false
     
     var body: some View {
         VStack {
@@ -30,7 +29,10 @@ struct CameraViewWrapper: View {
     @StateObject var viewModel = CameraViewModel()
     @State private var isButtonPressed = false
     @State private var showingPreview = false
-    
+    @State private var overlayVisible = false
+    @State private var lastImage: UIImage?
+    @State private var sliderValue: Double = 0.3
+    @State private var showingAccountInfo = false
     
     var body: some View {
         ZStack {
@@ -42,6 +44,33 @@ struct CameraViewWrapper: View {
                 .opacity(0.6)
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
+
+            if overlayVisible, let lastImage = lastImage {
+                Image(uiImage: lastImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                    .opacity(sliderValue) // Use slider value for opacity
+                    //.blur(radius: CGFloat(sliderValue * 10)) // Scale slider value for blur
+                    .edgesIgnoringSafeArea(.all)
+                    .mask(CustomMaskShape(cornerRadius: 20, blurRadius: CGFloat(12 - (sliderValue * 20))) // Pass scaled blur value
+                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                        .edgesIgnoringSafeArea(.all))
+            }
+            VStack{
+                Spacer()
+                Spacer()
+                Spacer()
+                if overlayVisible {
+                    Slider(value: $sliderValue, in: 0.0...0.6, step: 0.03)
+                        .padding()
+    //                    .background(Color.white.opacity(0.5))
+    //                    .cornerRadius(10)
+                        .padding(.horizontal)
+                        .padding(.bottom, 30)
+                        .tint(.white)
+                }
+            }
             
             VStack {
                 Spacer()
@@ -66,6 +95,7 @@ struct CameraViewWrapper: View {
                             .onTapGesture {
                                 withAnimation {
                                     isButtonPressed = true
+                                    overlayVisible = false
                                 }
                                 // Simulate a short delay for the button press visual feedback
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -79,20 +109,49 @@ struct CameraViewWrapper: View {
                                 }
                             }
                     }
-                    
-                    Spacer()// Adjust spacing as needed
-                    
+                    Spacer()
                 }.padding(.bottom, 100)
                 
+                
             }
+            
             VStack{
                 Spacer()
                 HStack{
                     Spacer()
-                    Spacer()
+                    Button(action: { //Account Button!!!
+                        showingAccountInfo.toggle()
+                    }) {
+                        Image(systemName: "ellipsis")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.black.opacity(0.5))
+                            .clipShape(Circle())
+                            .frame(width: 60, height: 60)
+                    }
+                    
+                    
                     Spacer()
                     
-                    Button(action: {
+                    Button(action: { //Overlay Button!!!
+                        if overlayVisible {
+                            withAnimation {
+                                overlayVisible = false
+                            }
+                        } else {
+                            viewModel.fetchLastImageURL { url in
+                                guard let url = url else { return }
+                                viewModel.fetchImage(from: url) { image in
+                                    if let image = image {
+                                        self.lastImage = image
+                                        withAnimation {
+                                            overlayVisible = true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    
                         // Future functionality action
                     }) {
                         Image(systemName: "ellipsis")
@@ -103,8 +162,17 @@ struct CameraViewWrapper: View {
                             .frame(width: 60, height: 60)
                     }
                     Spacer()
+                    
                 }.padding(.bottom, 110)
                 // Adjust bottom padding to position the buttons
+            }
+            if showingAccountInfo {
+                Color.black.opacity(0.5)
+                    .edgesIgnoringSafeArea(.all)
+                    .blur(radius: 10)
+                    .transition(.move(edge: .bottom))
+                AccountInfoView(showingAccountInfo: $showingAccountInfo)
+                    .transition(.move(edge: .bottom))
             }
         }
         .sheet(isPresented: $showingPreview) {  //The presentation of this needs to change
@@ -119,9 +187,29 @@ struct CameraViewWrapper: View {
             }
         }
         
+        
     }
 }
+struct CustomMaskShape: View {
+    var cornerRadius: CGFloat
+    var blurRadius: CGFloat
 
+    var body: some View {
+        GeometryReader { geometry in
+            let maskRect = CGRect(x: geometry.size.width / 19, // Adjust width and height
+                                  y: geometry.size.height / 5,
+                                  width: geometry.size.height / 2.5,
+                                  height: geometry.size.height / 2.2)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .frame(width: maskRect.width, height: maskRect.height)
+                    .offset(x: maskRect.minX, y: maskRect.minY)
+                    .blur(radius: blurRadius) // Adjust blur radius as needed
+            }
+        }
+    }
+}
 
 struct PhotoPreviewView: View {
     var image: UIImage

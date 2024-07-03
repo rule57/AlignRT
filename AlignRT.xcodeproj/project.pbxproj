@@ -27,6 +27,9 @@
 		24918AAD2C33B20C000EE644 /* PhotoPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918AAC2C33B203000EE644 /* PhotoPreviewViewController.swift */; };
 		24918AAF2C33B3B4000EE644 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918AAE2C33B3B0000EE644 /* CameraViewModel.swift */; };
 		24918AB12C33B3EB000EE644 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918AB02C33B3E7000EE644 /* CameraView.swift */; };
+		24F63BDC2C3503D200A13DE5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 24F63BDB2C3503D200A13DE5 /* FirebaseFirestore */; };
+		24F63BDE2C35FD0500A13DE5 /* ProfileCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */; };
+		24F63BE02C3605F600A13DE5 /* ProfileCameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */; };
 		42ADF2CD2C2D02F200420265 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 42ADF2CC2C2D02F200420265 /* FirebaseStorage */; };
 		42F685512C2CF708008A0D25 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F685502C2CF708008A0D25 /* CameraViewController.swift */; };
 /* End PBXBuildFile section */
@@ -70,6 +73,8 @@
 		24918AAC2C33B203000EE644 /* PhotoPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewViewController.swift; sourceTree = "<group>"; };
 		24918AAE2C33B3B0000EE644 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		24918AB02C33B3E7000EE644 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCameraView.swift; sourceTree = "<group>"; };
+		24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCameraViewModel.swift; sourceTree = "<group>"; };
 		42F685502C2CF708008A0D25 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,6 +86,7 @@
 				24918A972C2CE5DE000EE644 /* FirebaseFunctions in Frameworks */,
 				42ADF2CD2C2D02F200420265 /* FirebaseStorage in Frameworks */,
 				24918A932C2CE5DE000EE644 /* FirebaseAnalytics in Frameworks */,
+				24F63BDC2C3503D200A13DE5 /* FirebaseFirestore in Frameworks */,
 				24918A952C2CE5DE000EE644 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -130,6 +136,8 @@
 				24918A552C2CE1E7000EE644 /* AlignRTApp.swift */,
 				24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */,
 				24918A572C2CE1E7000EE644 /* ContentView.swift */,
+				24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */,
+				24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */,
 				24918AAE2C33B3B0000EE644 /* CameraViewModel.swift */,
 				24918AAA2C338BD8000EE644 /* CameraPreview.swift */,
 				24918AA62C3352A3000EE644 /* ImagePicker.swift */,
@@ -199,6 +207,7 @@
 				24918A942C2CE5DE000EE644 /* FirebaseAuth */,
 				24918A962C2CE5DE000EE644 /* FirebaseFunctions */,
 				42ADF2CC2C2D02F200420265 /* FirebaseStorage */,
+				24F63BDB2C3503D200A13DE5 /* FirebaseFirestore */,
 			);
 			productName = AlignRT;
 			productReference = 24918A522C2CE1E7000EE644 /* AlignRT.app */;
@@ -320,8 +329,10 @@
 			files = (
 				24918A802C2CE314000EE644 /* SignInView.swift in Sources */,
 				24918A9F2C2CF910000EE644 /* SignInWithAppleView.swift in Sources */,
+				24F63BDE2C35FD0500A13DE5 /* ProfileCameraView.swift in Sources */,
 				42F685512C2CF708008A0D25 /* CameraViewController.swift in Sources */,
 				24918AB12C33B3EB000EE644 /* CameraView.swift in Sources */,
+				24F63BE02C3605F600A13DE5 /* ProfileCameraViewModel.swift in Sources */,
 				24918AAB2C338BDC000EE644 /* CameraPreview.swift in Sources */,
 				24918AA72C3352A8000EE644 /* ImagePicker.swift in Sources */,
 				24918AA92C3352B8000EE644 /* AccountInfoView.swift in Sources */,
@@ -696,6 +707,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 24918A912C2CE5DE000EE644 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFunctions;
+		};
+		24F63BDB2C3503D200A13DE5 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24918A912C2CE5DE000EE644 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 		42ADF2CC2C2D02F200420265 /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;
