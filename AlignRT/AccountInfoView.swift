@@ -80,7 +80,7 @@ struct AccountInfoView: View {
         .alert(isPresented: $showingRetakeAlert) {
             Alert(
                 title: Text("Retake Profile Pictures"),
-                message: Text("Do you want to retake your profile pictures? This will delete the current pictures."),
+                message: Text("Confirming will delete current pictures permanently."),
                 primaryButton: .destructive(Text("Retake")) {
                     deleteProfilePics()
                     showingProfileCamera = true
@@ -198,9 +198,4 @@ struct AccountInfoView: View {
     }
 }
 
-struct AccountInfoView_Previews: PreviewProvider {
-    @State static var showingAccountInfo = true
-    static var previews: some View {
-        AccountInfoView(showingAccountInfo: $showingAccountInfo)
-    }
-}
+
