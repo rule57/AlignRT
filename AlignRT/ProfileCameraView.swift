@@ -11,6 +11,8 @@ import FirebaseStorage
 struct ProfileCameraView: View {
     @ObservedObject var viewModel = ProfileCameraViewModel()
     @State private var showingPreview = false
+    @State private var showUseRetakePrompt = false
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         ZStack {
@@ -20,7 +22,7 @@ struct ProfileCameraView: View {
             VStack {
                 Spacer()
 
-                HStack {
+                if !showUseRetakePrompt {
                     Button(action: {
                         withAnimation {
                             viewModel.capturePhoto()
@@ -31,16 +33,39 @@ struct ProfileCameraView: View {
                             .frame(width: 70, height: 70)
                             .overlay(Circle().stroke(Color.white, lineWidth: 4))
                     }
-
-                    Button(action: savePhotos) {
-                        Text("Save Photos")
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                    .padding()
+                } else {
+                    HStack {
+                        Button(action: {
+                            if viewModel.capturedImages.count >= 3 {
+                                savePhotos()
+                            } else {
+                                withAnimation {
+                                    showUseRetakePrompt = false
+                                }
+                            }
+                        }) {
+                            Text("Use Photo")
+                                .padding()
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                        Button(action: {
+                            viewModel.capturedImages.removeLast()
+                            withAnimation {
+                                showUseRetakePrompt = false
+                            }
+                        }) {
+                            Text("Retake")
+                                .padding()
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
                     }
+                    .padding()
                 }
-                .padding()
             }
 
             if showingPreview, let capturedImage = viewModel.capturedImage {
@@ -52,12 +77,12 @@ struct ProfileCameraView: View {
                     .onTapGesture {
                         withAnimation {
                             showingPreview = false
+                            showUseRetakePrompt = true
                         }
                     }
             }
         }
         .onAppear {
-            viewModel.setupCamera()
             viewModel.startSession()
         }
         .onDisappear {
@@ -86,6 +111,9 @@ struct ProfileCameraView: View {
                 }
             }
         }
+
+        viewModel.capturedImages.removeAll()
+        presentationMode.wrappedValue.dismiss()
     }
 }
 
@@ -94,7 +122,8 @@ struct ProfileCameraUIView: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> UIViewController {
         let vc = UIViewController()
-        viewModel.getPreviewLayer(for: vc.view)
+        let previewLayer = viewModel.getPreviewLayer(for: vc.view)
+        vc.view.layer.addSublayer(previewLayer)
         return vc
     }
 

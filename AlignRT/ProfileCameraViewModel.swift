@@ -26,8 +26,11 @@ class ProfileCameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureD
     func setupCamera() {
         session.beginConfiguration()
 
-        let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front)
-        guard let cameraInput = try? AVCaptureDeviceInput(device: camera!) else { return }
+        guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front),
+              let cameraInput = try? AVCaptureDeviceInput(device: camera) else {
+            print("Error: Unable to access the front camera")
+            return
+        }
 
         if session.canAddInput(cameraInput) {
             session.addInput(cameraInput)
@@ -59,9 +62,13 @@ class ProfileCameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureD
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else { return }
+
+        // Fix the flipping of the front camera image
+        let fixedImage = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .leftMirrored)
+
         DispatchQueue.main.async {
-            self.capturedImage = image
-            self.capturedImages.append(image)
+            self.capturedImage = fixedImage
+            self.capturedImages.append(fixedImage)
         }
     }
 
