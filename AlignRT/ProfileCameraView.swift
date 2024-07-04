@@ -15,8 +15,10 @@ struct ProfileCameraView: View {
 
     var body: some View {
         ZStack {
-            ProfileCameraUIView(viewModel: viewModel)
-                .edgesIgnoringSafeArea(.all)
+            if !showFinalConfirmation {
+                ProfileCameraUIView(viewModel: viewModel)
+                    .edgesIgnoringSafeArea(.all)
+            }
 
             VStack {
                 Spacer()
@@ -83,6 +85,7 @@ struct ProfileCameraView: View {
         .onReceive(viewModel.$capturedImage) { image in
             if viewModel.capturedImages.count >= 3 {
                 showFinalConfirmation = true
+                viewModel.stopSession()  // Stop the camera session
             }
         }
     }
@@ -111,6 +114,7 @@ struct ProfileCameraView: View {
     func retakePhotos() {
         viewModel.capturedImages.removeAll()
         showFinalConfirmation = false
+        viewModel.startSession()  // Restart the camera session
     }
 
     func provideFeedback() {

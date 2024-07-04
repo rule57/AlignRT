@@ -7,24 +7,34 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
+import FirebaseStorage
 
 struct AccountInfoView: View {
     @Binding var showingAccountInfo: Bool
     @State private var username: String = ""
     @State private var showingProfileCamera = false
-    @State private var profileImage: UIImage? = nil
+    @State private var profileImages: [UIImage] = []
+    @State private var currentImageIndex = 0
     @GestureState private var dragOffset = CGSize.zero
+    @State private var timer: Timer?
+    @State private var showingRetakeAlert = false
 
     var body: some View {
         VStack {
-            if let profileImage = profileImage {
-                Image(uiImage: profileImage)
+            if !profileImages.isEmpty {
+                Image(uiImage: profileImages[currentImageIndex])
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: 100, height: 100)
                     .clipShape(Circle())
                     .overlay(Circle().stroke(Color.white, lineWidth: 2))
                     .shadow(radius: 10)
                     .padding(.top, 50)
+                    .onTapGesture {
+                        showingRetakeAlert = true
+                    }
+                    .onAppear(perform: startImageSwitching)
+                    .onDisappear(perform: stopImageSwitching)
             } else {
                 Circle()
                     .fill(Color.gray)
@@ -67,6 +77,17 @@ struct AccountInfoView: View {
                 }
             }
         )
+        .alert(isPresented: $showingRetakeAlert) {
+            Alert(
+                title: Text("Retake Profile Pictures"),
+                message: Text("Do you want to retake your profile pictures? This will delete the current pictures."),
+                primaryButton: .destructive(Text("Retake")) {
+                    deleteProfilePics()
+                    showingProfileCamera = true
+                },
+                secondaryButton: .cancel()
+            )
+        }
         .onAppear(perform: loadAccountInfo)
         .fullScreenCover(isPresented: $showingProfileCamera) {
             ProfileCameraView()
@@ -96,6 +117,83 @@ struct AccountInfoView: View {
             } else {
                 print("Document does not exist")
             }
+        }
+
+        loadProfileImages()
+    }
+
+    func loadProfileImages() {
+        guard let user = Auth.auth().currentUser else { return }
+        let storageRef = Storage.storage().reference().child("users/\(user.uid)/profile_pics")
+        storageRef.listAll { (result, error) in
+            if let error = error {
+                print("Error listing profile pics: \(error.localizedDescription)")
+                return
+            }
+
+            guard let result = result else {
+                print("No result found")
+                return
+            }
+
+            for item in result.items {
+                item.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                    if let error = error {
+                        print("Error downloading profile pic: \(error.localizedDescription)")
+                        return
+                    }
+
+                    if let data = data, let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            self.profileImages.append(image)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    func startImageSwitching() {
+        stopImageSwitching()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
+            withAnimation {
+                currentImageIndex = (currentImageIndex + 1) % profileImages.count
+            }
+        }
+    }
+
+    func stopImageSwitching() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    func deleteProfilePics() {
+        guard let user = Auth.auth().currentUser else { return }
+        let storageRef = Storage.storage().reference().child("users/\(user.uid)/profile_pics")
+        
+        storageRef.listAll { (result, error) in
+            if let error = error {
+                print("Error listing profile pics: \(error.localizedDescription)")
+                return
+            }
+
+            guard let result = result else {
+                print("No result found")
+                return
+            }
+
+            for item in result.items {
+                item.delete { error in
+                    if let error = error {
+                        print("Error deleting profile pic: \(error.localizedDescription)")
+                    } else {
+                        print("Profile pic deleted successfully")
+                    }
+                }
+            }
+
+            // Clear local profile images
+            self.profileImages.removeAll()
         }
     }
 }
