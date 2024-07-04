@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -30,6 +30,9 @@
 		24F63BDC2C3503D200A13DE5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 24F63BDB2C3503D200A13DE5 /* FirebaseFirestore */; };
 		24F63BDE2C35FD0500A13DE5 /* ProfileCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */; };
 		24F63BE02C3605F600A13DE5 /* ProfileCameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */; };
+		24F63BE32C371B7900A13DE5 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = 24F63BE22C371B7900A13DE5 /* SwiftyGif */; };
+		24F63BE92C372EB800A13DE5 /* PlaceHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BE82C372EA100A13DE5 /* PlaceHolder.swift */; };
+		24F63BEE2C3738EC00A13DE5 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BED2C3738EA00A13DE5 /* Utility.swift */; };
 		42ADF2CD2C2D02F200420265 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 42ADF2CC2C2D02F200420265 /* FirebaseStorage */; };
 		42F685512C2CF708008A0D25 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F685502C2CF708008A0D25 /* CameraViewController.swift */; };
 /* End PBXBuildFile section */
@@ -50,6 +53,19 @@
 			remoteInfo = AlignRT;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		24F63BE72C372B9D00A13DE5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		24918A522C2CE1E7000EE644 /* AlignRT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlignRT.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +91,8 @@
 		24918AB02C33B3E7000EE644 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCameraView.swift; sourceTree = "<group>"; };
 		24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCameraViewModel.swift; sourceTree = "<group>"; };
+		24F63BE82C372EA100A13DE5 /* PlaceHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHolder.swift; sourceTree = "<group>"; };
+		24F63BED2C3738EA00A13DE5 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		42F685502C2CF708008A0D25 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,6 +106,7 @@
 				24918A932C2CE5DE000EE644 /* FirebaseAnalytics in Frameworks */,
 				24F63BDC2C3503D200A13DE5 /* FirebaseFirestore in Frameworks */,
 				24918A952C2CE5DE000EE644 /* FirebaseAuth in Frameworks */,
+				24F63BE32C371B7900A13DE5 /* SwiftyGif in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,15 +152,17 @@
 			isa = PBXGroup;
 			children = (
 				24918AA32C2DC3E0000EE644 /* AlignRT.entitlements */,
+				24918A572C2CE1E7000EE644 /* ContentView.swift */,
 				24918A552C2CE1E7000EE644 /* AlignRTApp.swift */,
 				24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */,
-				24918A572C2CE1E7000EE644 /* ContentView.swift */,
 				24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */,
 				24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */,
+				24918AA82C3352B4000EE644 /* AccountInfoView.swift */,
+				24F63BED2C3738EA00A13DE5 /* Utility.swift */,
+				24F63BE82C372EA100A13DE5 /* PlaceHolder.swift */,
 				24918AAE2C33B3B0000EE644 /* CameraViewModel.swift */,
 				24918AAA2C338BD8000EE644 /* CameraPreview.swift */,
 				24918AA62C3352A3000EE644 /* ImagePicker.swift */,
-				24918AA82C3352B4000EE644 /* AccountInfoView.swift */,
 				24918AA42C2DD7FA000EE644 /* CameraViewControllerWrapper.swift */,
 				42F685502C2CF708008A0D25 /* CameraViewController.swift */,
 				24918AB02C33B3E7000EE644 /* CameraView.swift */,
@@ -196,6 +217,7 @@
 				24918A4E2C2CE1E7000EE644 /* Sources */,
 				24918A4F2C2CE1E7000EE644 /* Frameworks */,
 				24918A502C2CE1E7000EE644 /* Resources */,
+				24F63BE72C372B9D00A13DE5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -208,6 +230,7 @@
 				24918A962C2CE5DE000EE644 /* FirebaseFunctions */,
 				42ADF2CC2C2D02F200420265 /* FirebaseStorage */,
 				24F63BDB2C3503D200A13DE5 /* FirebaseFirestore */,
+				24F63BE22C371B7900A13DE5 /* SwiftyGif */,
 			);
 			productName = AlignRT;
 			productReference = 24918A522C2CE1E7000EE644 /* AlignRT.app */;
@@ -273,7 +296,7 @@
 				};
 			};
 			buildConfigurationList = 24918A4D2C2CE1E7000EE644 /* Build configuration list for PBXProject "AlignRT" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -283,6 +306,7 @@
 			mainGroup = 24918A492C2CE1E7000EE644;
 			packageReferences = (
 				24918A912C2CE5DE000EE644 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				24F63BE12C371B7900A13DE5 /* XCRemoteSwiftPackageReference "SwiftyGif" */,
 			);
 			productRefGroup = 24918A532C2CE1E7000EE644 /* Products */;
 			projectDirPath = "";
@@ -335,9 +359,11 @@
 				24F63BE02C3605F600A13DE5 /* ProfileCameraViewModel.swift in Sources */,
 				24918AAB2C338BDC000EE644 /* CameraPreview.swift in Sources */,
 				24918AA72C3352A8000EE644 /* ImagePicker.swift in Sources */,
+				24F63BE92C372EB800A13DE5 /* PlaceHolder.swift in Sources */,
 				24918AA92C3352B8000EE644 /* AccountInfoView.swift in Sources */,
 				24918AAD2C33B20C000EE644 /* PhotoPreviewViewController.swift in Sources */,
 				24918AAF2C33B3B4000EE644 /* CameraViewModel.swift in Sources */,
+				24F63BEE2C3738EC00A13DE5 /* Utility.swift in Sources */,
 				24918A582C2CE1E7000EE644 /* ContentView.swift in Sources */,
 				24918A562C2CE1E7000EE644 /* AlignRTApp.swift in Sources */,
 				24918AA52C2DD800000EE644 /* CameraViewControllerWrapper.swift in Sources */,
@@ -510,11 +536,12 @@
 				DEVELOPMENT_TEAM = 57F7AC83MF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = PP;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -545,11 +572,12 @@
 				DEVELOPMENT_TEAM = 57F7AC83MF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = PP;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -690,6 +718,14 @@
 				minimumVersion = 10.28.1;
 			};
 		};
+		24F63BE12C371B7900A13DE5 /* XCRemoteSwiftPackageReference "SwiftyGif" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kirualex/SwiftyGif";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.5;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -712,6 +748,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 24918A912C2CE5DE000EE644 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		24F63BE22C371B7900A13DE5 /* SwiftyGif */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24F63BE12C371B7900A13DE5 /* XCRemoteSwiftPackageReference "SwiftyGif" */;
+			productName = SwiftyGif;
 		};
 		42ADF2CC2C2D02F200420265 /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;

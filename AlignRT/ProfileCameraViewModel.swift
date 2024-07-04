@@ -7,6 +7,7 @@
 import SwiftUI
 import AVFoundation
 
+
 class ProfileCameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
     @Published var capturedImage: UIImage?
     @Published var capturedImages: [UIImage] = []
@@ -58,6 +59,7 @@ class ProfileCameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureD
     func capturePhoto() {
         let settings = AVCapturePhotoSettings()
         output.capturePhoto(with: settings, delegate: self)
+        print("captured")
     }
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
@@ -69,6 +71,7 @@ class ProfileCameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureD
         DispatchQueue.main.async {
             self.capturedImage = fixedImage
             self.capturedImages.append(fixedImage)
+            print("image added to the array: capturedImages")
         }
     }
 

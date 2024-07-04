@@ -1,40 +1,32 @@
-//
-//  AccountInfoView.swift
-//  AlignRT
-//
-//  Created by William Rule on 7/1/24.
-//
+
 import SwiftUI
-import FirebaseFirestore
+import Firebase
 import FirebaseAuth
 import FirebaseStorage
+import SwiftyGif
+import MobileCoreServices
+import ImageIO
 
 struct AccountInfoView: View {
     @Binding var showingAccountInfo: Bool
     @State private var username: String = ""
     @State private var showingProfileCamera = false
-    @State private var profileImages: [UIImage] = []
-    @State private var currentImageIndex = 0
-    @GestureState private var dragOffset = CGSize.zero
-    @State private var timer: Timer?
+    @State private var capturedImages: [UIImage] = []
+    @State private var profileGif: Data?
     @State private var showingRetakeAlert = false
+    @StateObject var profileCameraViewModel = ProfileCameraViewModel()
 
     var body: some View {
         VStack {
-            if !profileImages.isEmpty {
-                Image(uiImage: profileImages[currentImageIndex])
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                    .shadow(radius: 10)
-                    .padding(.top, 50)
-                    .onTapGesture {
-                        showingRetakeAlert = true
-                    }
-                    .onAppear(perform: startImageSwitching)
-                    .onDisappear(perform: stopImageSwitching)
+            if let profileGif = profileGif {
+                GifImage(gifData: profileGif) {
+                    showingRetakeAlert = true
+                }
+                .frame(width: 100, height: 100)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                .shadow(radius: 10)
+                .padding(.top, 50)
             } else {
                 Circle()
                     .fill(Color.gray)
@@ -64,33 +56,23 @@ struct AccountInfoView: View {
         .padding()
         .background(Color.black.opacity(0.5))
         .cornerRadius(20)
-        .offset(y: dragOffset.height)
-        .gesture(
-            DragGesture().updating($dragOffset) { drag, state, _ in
-                state = drag.translation
-            }
-            .onEnded { value in
-                if value.translation.height > 100 {
-                    withAnimation {
-                        showingAccountInfo = false
-                    }
-                }
-            }
-        )
         .alert(isPresented: $showingRetakeAlert) {
             Alert(
                 title: Text("Retake Profile Pictures"),
-                message: Text("Confirming will delete current pictures permanently."),
+                message: Text("Do you want to retake your profile pictures? This will delete the current GIF."),
                 primaryButton: .destructive(Text("Retake")) {
-                    deleteProfilePics()
+                    deleteProfileGif()
                     showingProfileCamera = true
+                    capturedImages.removeAll() // Ensure capturedImages is reset
+                    //profileCameraViewModel.resetSession() // Reset the camera session
                 },
                 secondaryButton: .cancel()
             )
         }
         .onAppear(perform: loadAccountInfo)
         .fullScreenCover(isPresented: $showingProfileCamera) {
-            ProfileCameraView()
+            ProfileCameraView(capturedImages: $capturedImages, onComplete: createAndUploadGif)
+                .environmentObject(profileCameraViewModel)  // Pass the state object
         }
     }
 
@@ -119,83 +101,95 @@ struct AccountInfoView: View {
             }
         }
 
-        loadProfileImages()
+        loadProfileGif()
     }
 
-    func loadProfileImages() {
+    func loadProfileGif() {
         guard let user = Auth.auth().currentUser else { return }
-        let storageRef = Storage.storage().reference().child("users/\(user.uid)/profile_pics")
-        storageRef.listAll { (result, error) in
+        let storageRef = Storage.storage().reference().child("users/\(user.uid)/profile_gif/profile.gif")
+        storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
             if let error = error {
-                print("Error listing profile pics: \(error.localizedDescription)")
+                print("Error loading profile gif: \(error.localizedDescription)")
                 return
             }
-
-            guard let result = result else {
-                print("No result found")
-                return
-            }
-
-            for item in result.items {
-                item.getData(maxSize: 10 * 1024 * 1024) { data, error in
-                    if let error = error {
-                        print("Error downloading profile pic: \(error.localizedDescription)")
-                        return
-                    }
-
-                    if let data = data, let image = UIImage(data: data) {
-                        DispatchQueue.main.async {
-                            self.profileImages.append(image)
-                        }
-                    }
-                }
-            }
+            self.profileGif = data
         }
     }
 
-    func startImageSwitching() {
-        stopImageSwitching()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
-            withAnimation {
-                currentImageIndex = (currentImageIndex + 1) % profileImages.count
-            }
-        }
-    }
-
-    func stopImageSwitching() {
-        timer?.invalidate()
-        timer = nil
-    }
-
-    func deleteProfilePics() {
+    func createAndUploadGif(images: [UIImage]) {
         guard let user = Auth.auth().currentUser else { return }
-        let storageRef = Storage.storage().reference().child("users/\(user.uid)/profile_pics")
+        guard let gifData = ImageUtility.createGif(from: images) else { return }
         
-        storageRef.listAll { (result, error) in
+        let storageRef = Storage.storage().reference().child("users/\(user.uid)/profile_gif/profile.gif")
+        storageRef.putData(gifData, metadata: nil) { metadata, error in
             if let error = error {
-                print("Error listing profile pics: \(error.localizedDescription)")
+                print("Error uploading profile gif: \(error.localizedDescription)")
                 return
             }
+            print("Profile gif uploaded successfully")
+            self.profileGif = gifData
+        }
+    }
 
-            guard let result = result else {
-                print("No result found")
-                return
+    func deleteProfileGif() {
+        guard let user = Auth.auth().currentUser else { return }
+        let storageRef = Storage.storage().reference().child("users/\(user.uid)/profile_gif/profile.gif")
+        
+        storageRef.delete { error in
+            if let error = error {
+                print("Error deleting profile gif: \(error.localizedDescription)")
+            } else {
+                print("Profile gif deleted successfully")
+                self.profileGif = nil
             }
-
-            for item in result.items {
-                item.delete { error in
-                    if let error = error {
-                        print("Error deleting profile pic: \(error.localizedDescription)")
-                    } else {
-                        print("Profile pic deleted successfully")
-                    }
-                }
-            }
-
-            // Clear local profile images
-            self.profileImages.removeAll()
         }
     }
 }
 
+struct GifImage: UIViewRepresentable {
+    let gifData: Data
+    let onTap: () -> Void
 
+    func makeUIView(context: Context) -> UIImageView {
+        let imageView = try? UIImageView(gifImage: UIImage(gifData: gifData))
+        imageView?.contentMode = .scaleAspectFit
+        imageView?.isUserInteractionEnabled = true
+        
+        let tapGesture = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleTap))
+        imageView?.addGestureRecognizer(tapGesture)
+
+        return imageView ?? UIImageView()
+    }
+
+    func updateUIView(_ uiView: UIImageView, context: Context) {
+        do {
+            let gifImage = try UIImage(gifData: gifData)
+            uiView.setGifImage(gifImage)
+        } catch {
+            print("Error updating gif image: \(error)")
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onTap: onTap)
+    }
+
+    class Coordinator: NSObject {
+        let onTap: () -> Void
+
+        init(onTap: @escaping () -> Void) {
+            self.onTap = onTap
+        }
+
+        @objc func handleTap() {
+            onTap()
+        }
+    }
+}
+
+struct AccountInfoView_Previews: PreviewProvider {
+    @State static var showingAccountInfo = true
+    static var previews: some View {
+        AccountInfoView(showingAccountInfo: $showingAccountInfo)
+    }
+}
