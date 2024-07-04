@@ -38,7 +38,7 @@ struct ProfileCameraView: View {
                     HStack {
                         Button(action: {
                             if viewModel.capturedImages.count >= 3 {
-                                savePhotos()
+                                saveProfilePhotos()
                             } else {
                                 withAnimation {
                                     showUseRetakePrompt = false
@@ -95,9 +95,9 @@ struct ProfileCameraView: View {
         }
     }
 
-    func savePhotos() {
+    func saveProfilePhotos() {
         guard let user = Auth.auth().currentUser else { return }
-        let storageRef = Storage.storage().reference().child("profile_photos/\(user.uid)")
+        let storageRef = Storage.storage().reference().child("users/\(user.uid)/profile_pics")
 
         for (index, photo) in viewModel.capturedImages.enumerated() {
             if let imageData = photo.jpegData(compressionQuality: 0.8) {
@@ -106,7 +106,7 @@ struct ProfileCameraView: View {
                     if let error = error {
                         print("Error uploading photo \(index): \(error.localizedDescription)")
                     } else {
-                        print("Photo \(index) uploaded successfully")
+                        print("Photo \(index) uploaded successfully to path: \(photoRef.fullPath)")
                     }
                 }
             }
