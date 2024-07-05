@@ -51,13 +51,13 @@ struct AccountInfoView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
 
-            Button(action: saveAccountInfo) {
-                Text("Save")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
+//            Button(action: saveAccountInfo) {
+//                Text("Save")
+//                    .padding()
+//                    .background(Color.blue)
+//                    .foregroundColor(.white)
+//                    .cornerRadius(10)
+//            }
             .padding(.bottom, 20)
         }
         .padding()
@@ -81,11 +81,16 @@ struct AccountInfoView: View {
             ProfileCameraView(capturedImages: $capturedImages, onComplete: createAndUploadGif)
                 .environmentObject(profileCameraViewModel)  // Pass the state object
         }
-        .gesture(DragGesture().onEnded({ value in
-            if value.translation.width > 100 { // Adjust the value as per your requirement
-                showingAccountInfo = false
-            }
-        }))
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    if value.translation.height > 100 {
+                        // Swipe down detected
+                        showingAccountInfo = false
+                        saveAccountInfo()
+                    }
+                }
+        )
     }
 
     func saveAccountInfo() {

@@ -7,12 +7,15 @@ import CryptoKit
 
 struct ContentView: View {
     @State private var isAuthenticated = false
+    @StateObject var gifCreator = GifCreator()
     
     var body: some View {
         VStack {
             if isAuthenticated {
+                
                 CameraViewWrapper()
                     .edgesIgnoringSafeArea(.all)
+                
             } else {
                 SignInWithAppleView(isAuthenticated: $isAuthenticated)
                 
@@ -34,6 +37,7 @@ struct CameraViewWrapper: View {
     @State private var sliderValue: Double = 0.3
     @State private var showingAccountInfo = false
     @State private var showingUserListView = false
+    @StateObject var gifCreator = GifCreator()
     
     var body: some View {
         ZStack {
@@ -119,7 +123,7 @@ struct CameraViewWrapper: View {
             VStack{
                 Spacer()
                 HStack{
-                    Button(action: {
+                    Button(action: { //FEED BUTTON
                         showingUserListView = true
                     }){
                         Image(systemName: "ellipsis")
@@ -142,7 +146,7 @@ struct CameraViewWrapper: View {
                             .clipShape(Circle())
                             .frame(width: 60, height: 60)
                     }
-                    
+                    //Spacer()   //EXTRA
                     
                     Spacer()
                     
@@ -174,7 +178,24 @@ struct CameraViewWrapper: View {
                             .clipShape(Circle())
                             .frame(width: 60, height: 60)
                     }
-                    Spacer()
+//                    Button(action: {
+//                        if let user = Auth.auth().currentUser {
+//                            gifCreator.createAndUploadGif(for: user.uid) { success in
+//                                if success {
+//                                    print("Post GIF created and uploaded successfully")
+//                                } else {
+//                                    print("Failed to create and upload post GIF")
+//                                }
+//                            }
+//                        }
+//                    }) {
+//                        Image(systemName: "ellipsis")
+//                            .foregroundColor(.white)
+//                            .padding()
+//                            .background(Color.black.opacity(0.5))
+//                            .clipShape(Circle())
+//                            .frame(width: 60, height: 60)
+//                    }
                     
                 }.padding(.bottom, 110)
                 // Adjust bottom padding to position the buttons
