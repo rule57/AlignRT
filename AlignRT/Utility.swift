@@ -92,11 +92,14 @@ import UniformTypeIdentifiers
 //        return UIImage(cgImage: newCgImage)
 //    }
 //}
+
 import Foundation
 import UIKit
 import ImageIO
+import MobileCoreServices
 
-class ImageUtility {
+
+class Utility {
     static func createGif(from images: [UIImage]) -> Data? {
         guard !images.isEmpty else { return nil }
 

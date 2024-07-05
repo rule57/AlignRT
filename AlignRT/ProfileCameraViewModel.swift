@@ -7,7 +7,6 @@
 import SwiftUI
 import AVFoundation
 
-
 class ProfileCameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
     @Published var capturedImage: UIImage?
     @Published var capturedImages: [UIImage] = []
@@ -46,24 +45,31 @@ class ProfileCameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureD
 
     func startSession() {
         if !session.isRunning {
-            session.startRunning()
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.session.startRunning()
+            }
         }
     }
 
     func stopSession() {
         if session.isRunning {
-            session.stopRunning()
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.session.stopRunning()
+            }
         }
     }
 
     func capturePhoto() {
         let settings = AVCapturePhotoSettings()
         output.capturePhoto(with: settings, delegate: self)
-        print("captured")
+        print("Captured")
     }
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else { return }
+        guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else {
+            print("Error processing photo: \(String(describing: error))")
+            return
+        }
 
         // Fix the flipping of the front camera image
         let fixedImage = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .leftMirrored)
@@ -71,7 +77,7 @@ class ProfileCameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureD
         DispatchQueue.main.async {
             self.capturedImage = fixedImage
             self.capturedImages.append(fixedImage)
-            print("image added to the array: capturedImages")
+            print("Image added to the array: capturedImages")
         }
     }
 
@@ -82,5 +88,13 @@ class ProfileCameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureD
             previewLayer?.frame = view.bounds
         }
         return previewLayer!
+    }
+
+    func resetSession() {
+        stopSession()
+        capturedImages.removeAll()
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.session.startRunning()
+        }
     }
 }
