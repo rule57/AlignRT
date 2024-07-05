@@ -18,7 +18,7 @@ struct UsersListView: View {
             List(users) { user in
                 HStack {
                     if let urlString = profileGifUrls[user.id ?? ""], let url = URL(string: urlString) {
-                        GifImageView(gifUrl: url)
+                        GifImage(gifUrl: url)
                             .frame(width: 50, height: 50)
                             .clipShape(Circle())
                     }

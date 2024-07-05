@@ -81,6 +81,11 @@ struct AccountInfoView: View {
             ProfileCameraView(capturedImages: $capturedImages, onComplete: createAndUploadGif)
                 .environmentObject(profileCameraViewModel)  // Pass the state object
         }
+        .gesture(DragGesture().onEnded({ value in
+            if value.translation.width > 100 { // Adjust the value as per your requirement
+                showingAccountInfo = false
+            }
+        }))
     }
 
     func saveAccountInfo() {
