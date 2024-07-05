@@ -4,19 +4,25 @@
 //
 //  Created by William Rule on 7/4/24.
 //
-
 import SwiftUI
-import AVFoundation
+import SwiftyGif
 
-//struct ProfileCameraUIView: UIViewControllerRepresentable {
-//    @ObservedObject var viewModel: ProfileCameraViewModel
-//
-//    func makeUIViewController(context: Context) -> UIViewController {
-//        let vc = UIViewController()
-//        let previewLayer = viewModel.getPreviewLayer(for: vc.view)
-//        vc.view.layer.addSublayer(previewLayer)
-//        return vc
-//    }
-//
-//    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
-//}
+struct GifImage: UIViewRepresentable {
+    let gifData: Data
+
+    func makeUIView(context: Context) -> UIImageView {
+        let imageView = try? UIImageView(gifImage: UIImage(gifData: gifData))
+        imageView?.contentMode = .scaleAspectFill
+        imageView?.clipsToBounds = true
+        return imageView ?? UIImageView()
+    }
+
+    func updateUIView(_ uiView: UIImageView, context: Context) {
+        do {
+            let gifImage = try UIImage(gifData: gifData)
+            uiView.setGifImage(gifImage)
+        } catch {
+            print("Error updating gif image: \(error)")
+        }
+    }
+}

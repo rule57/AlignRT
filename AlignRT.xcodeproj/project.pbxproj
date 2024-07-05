@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		245BA8272C37BF2900C0E5E7 /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245BA8262C37BF2400C0E5E7 /* UserListView.swift */; };
+		245BA8292C37C64B00C0E5E7 /* GifImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245BA8282C37C64600C0E5E7 /* GifImageView.swift */; };
 		24918A562C2CE1E7000EE644 /* AlignRTApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918A552C2CE1E7000EE644 /* AlignRTApp.swift */; };
 		24918A582C2CE1E7000EE644 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918A572C2CE1E7000EE644 /* ContentView.swift */; };
 		24918A5A2C2CE1E9000EE644 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24918A592C2CE1E9000EE644 /* Assets.xcassets */; };
@@ -31,7 +33,7 @@
 		24F63BDE2C35FD0500A13DE5 /* ProfileCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */; };
 		24F63BE02C3605F600A13DE5 /* ProfileCameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */; };
 		24F63BE32C371B7900A13DE5 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = 24F63BE22C371B7900A13DE5 /* SwiftyGif */; };
-		24F63BE92C372EB800A13DE5 /* ProfileCameraUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BE82C372EA100A13DE5 /* ProfileCameraUIView.swift */; };
+		24F63BE92C372EB800A13DE5 /* GifImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BE82C372EA100A13DE5 /* GifImage.swift */; };
 		24F63BEE2C3738EC00A13DE5 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BED2C3738EA00A13DE5 /* Utility.swift */; };
 		42ADF2CD2C2D02F200420265 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 42ADF2CC2C2D02F200420265 /* FirebaseStorage */; };
 		42F685512C2CF708008A0D25 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F685502C2CF708008A0D25 /* CameraViewController.swift */; };
@@ -68,6 +70,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		245BA8262C37BF2400C0E5E7 /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
+		245BA8282C37C64600C0E5E7 /* GifImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifImageView.swift; sourceTree = "<group>"; };
 		24918A522C2CE1E7000EE644 /* AlignRT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlignRT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24918A552C2CE1E7000EE644 /* AlignRTApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignRTApp.swift; sourceTree = "<group>"; };
 		24918A572C2CE1E7000EE644 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -91,7 +95,7 @@
 		24918AB02C33B3E7000EE644 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCameraView.swift; sourceTree = "<group>"; };
 		24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCameraViewModel.swift; sourceTree = "<group>"; };
-		24F63BE82C372EA100A13DE5 /* ProfileCameraUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCameraUIView.swift; sourceTree = "<group>"; };
+		24F63BE82C372EA100A13DE5 /* GifImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifImage.swift; sourceTree = "<group>"; };
 		24F63BED2C3738EA00A13DE5 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		42F685502C2CF708008A0D25 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -157,11 +161,13 @@
 				24918A9E2C2CF8FF000EE644 /* SignInWithAppleView.swift */,
 				24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */,
 				24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */,
+				245BA8262C37BF2400C0E5E7 /* UserListView.swift */,
 				24918AA82C3352B4000EE644 /* AccountInfoView.swift */,
 				24F63BED2C3738EA00A13DE5 /* Utility.swift */,
-				24F63BE82C372EA100A13DE5 /* ProfileCameraUIView.swift */,
+				24F63BE82C372EA100A13DE5 /* GifImage.swift */,
 				24918AAE2C33B3B0000EE644 /* CameraViewModel.swift */,
 				24918AAA2C338BD8000EE644 /* CameraPreview.swift */,
+				245BA8282C37C64600C0E5E7 /* GifImageView.swift */,
 				24918AA62C3352A3000EE644 /* ImagePicker.swift */,
 				24918AA42C2DD7FA000EE644 /* CameraViewControllerWrapper.swift */,
 				42F685502C2CF708008A0D25 /* CameraViewController.swift */,
@@ -351,6 +357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				245BA8272C37BF2900C0E5E7 /* UserListView.swift in Sources */,
 				24918A802C2CE314000EE644 /* SignInView.swift in Sources */,
 				24918A9F2C2CF910000EE644 /* SignInWithAppleView.swift in Sources */,
 				24F63BDE2C35FD0500A13DE5 /* ProfileCameraView.swift in Sources */,
@@ -359,7 +366,8 @@
 				24F63BE02C3605F600A13DE5 /* ProfileCameraViewModel.swift in Sources */,
 				24918AAB2C338BDC000EE644 /* CameraPreview.swift in Sources */,
 				24918AA72C3352A8000EE644 /* ImagePicker.swift in Sources */,
-				24F63BE92C372EB800A13DE5 /* ProfileCameraUIView.swift in Sources */,
+				245BA8292C37C64B00C0E5E7 /* GifImageView.swift in Sources */,
+				24F63BE92C372EB800A13DE5 /* GifImage.swift in Sources */,
 				24918AA92C3352B8000EE644 /* AccountInfoView.swift in Sources */,
 				24918AAD2C33B20C000EE644 /* PhotoPreviewViewController.swift in Sources */,
 				24918AAF2C33B3B4000EE644 /* CameraViewModel.swift in Sources */,

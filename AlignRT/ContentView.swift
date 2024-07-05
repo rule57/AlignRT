@@ -33,6 +33,7 @@ struct CameraViewWrapper: View {
     @State private var lastImage: UIImage?
     @State private var sliderValue: Double = 0.3
     @State private var showingAccountInfo = false
+    @State private var showingUserListView = false
     
     var body: some View {
         ZStack {
@@ -118,7 +119,19 @@ struct CameraViewWrapper: View {
             VStack{
                 Spacer()
                 HStack{
-                    Spacer()
+                    Button(action: {
+                        showingUserListView = true
+                    }){
+                        Image(systemName: "ellipsis")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.black.opacity(0.5))
+                            .clipShape(Circle())
+                            .frame(width: 60, height: 60)}
+                    
+                    .sheet(isPresented: $showingUserListView) {
+                                        UsersListView()
+                                    }
                     Button(action: { //Account Button!!!
                         showingAccountInfo.toggle()
                     }) {

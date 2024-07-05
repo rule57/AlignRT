@@ -25,7 +25,7 @@ struct AccountInfoView: View {
                     .fill(Color.gray)
                     .frame(width: 100, height: 100)
                     .overlay(
-                        GifImage(gifData: profileGif) {
+                        ProGifImage(gifData: profileGif) {
                             showingRetakeAlert = true
                         }
                             .frame(width: 100, height: 100)
@@ -156,7 +156,7 @@ struct AccountInfoView: View {
 import SwiftUI
 import SwiftyGif
 
-struct GifImage: UIViewRepresentable {
+struct ProGifImage: UIViewRepresentable {
     let gifData: Data
     let onTap: () -> Void
 
