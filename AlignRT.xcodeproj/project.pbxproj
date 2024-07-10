@@ -30,6 +30,7 @@
 		24918AAF2C33B3B4000EE644 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918AAE2C33B3B0000EE644 /* CameraViewModel.swift */; };
 		24918AB12C33B3EB000EE644 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24918AB02C33B3E7000EE644 /* CameraView.swift */; };
 		24F0D0742C37D9EB006C9E4A /* GifCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F0D0732C37D9E7006C9E4A /* GifCreator.swift */; };
+		24F0D0762C37FC31006C9E4A /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F0D0752C37FC2B006C9E4A /* Users.swift */; };
 		24F63BDC2C3503D200A13DE5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 24F63BDB2C3503D200A13DE5 /* FirebaseFirestore */; };
 		24F63BDE2C35FD0500A13DE5 /* ProfileCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */; };
 		24F63BE02C3605F600A13DE5 /* ProfileCameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */; };
@@ -95,6 +96,7 @@
 		24918AAE2C33B3B0000EE644 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		24918AB02C33B3E7000EE644 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		24F0D0732C37D9E7006C9E4A /* GifCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifCreator.swift; sourceTree = "<group>"; };
+		24F0D0752C37FC2B006C9E4A /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCameraView.swift; sourceTree = "<group>"; };
 		24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCameraViewModel.swift; sourceTree = "<group>"; };
 		24F63BE82C372EA100A13DE5 /* GifImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifImage.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				24F63BDF2C3605F000A13DE5 /* ProfileCameraViewModel.swift */,
 				24F63BDD2C35FD0000A13DE5 /* ProfileCameraView.swift */,
 				245BA8262C37BF2400C0E5E7 /* UserListView.swift */,
+				24F0D0752C37FC2B006C9E4A /* Users.swift */,
 				24918AA82C3352B4000EE644 /* AccountInfoView.swift */,
 				24F0D0732C37D9E7006C9E4A /* GifCreator.swift */,
 				24F63BED2C3738EA00A13DE5 /* Utility.swift */,
@@ -372,6 +375,7 @@
 				245BA8292C37C64B00C0E5E7 /* GifImageView.swift in Sources */,
 				24F63BE92C372EB800A13DE5 /* GifImage.swift in Sources */,
 				24918AA92C3352B8000EE644 /* AccountInfoView.swift in Sources */,
+				24F0D0762C37FC31006C9E4A /* Users.swift in Sources */,
 				24918AAD2C33B20C000EE644 /* PhotoPreviewViewController.swift in Sources */,
 				24918AAF2C33B3B4000EE644 /* CameraViewModel.swift in Sources */,
 				24F63BEE2C3738EC00A13DE5 /* Utility.swift in Sources */,

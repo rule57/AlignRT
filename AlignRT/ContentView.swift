@@ -1,24 +1,21 @@
-
 import SwiftUI
 import FirebaseAuth
 import AuthenticationServices
 import CryptoKit
-
+import FirebaseStorage
+import Firebase
+//import GTMSessionFetcherCore
 
 struct ContentView: View {
     @State private var isAuthenticated = false
-    @StateObject var gifCreator = GifCreator()
-    
+
     var body: some View {
         VStack {
             if isAuthenticated {
-                
                 CameraViewWrapper()
                     .edgesIgnoringSafeArea(.all)
-                
             } else {
                 SignInWithAppleView(isAuthenticated: $isAuthenticated)
-                
             }
         }
         .onAppear {
@@ -28,6 +25,7 @@ struct ContentView: View {
         }
     }
 }
+
 struct CameraViewWrapper: View {
     @StateObject var viewModel = CameraViewModel()
     @State private var isButtonPressed = false
@@ -37,13 +35,14 @@ struct CameraViewWrapper: View {
     @State private var sliderValue: Double = 0.3
     @State private var showingAccountInfo = false
     @State private var showingUserListView = false
-    @StateObject var gifCreator = GifCreator()
-    
+    @State private var creatingGif = false
+    @State private var errorMessage: String?
+
     var body: some View {
         ZStack {
             CameraView(viewModel: viewModel)
                 .edgesIgnoringSafeArea(.all)
-            
+
             Image("CameraPreviewBackground1")
                 .resizable()
                 .opacity(0.6)
@@ -55,45 +54,43 @@ struct CameraViewWrapper: View {
                     .resizable()
                     .scaledToFill()
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                    .opacity(sliderValue) // Use slider value for opacity
-                    //.blur(radius: CGFloat(sliderValue * 10)) // Scale slider value for blur
+                    .opacity(sliderValue)
                     .edgesIgnoringSafeArea(.all)
-                    .mask(CustomMaskShape(cornerRadius: 20, blurRadius: CGFloat(12 - (sliderValue * 20))) // Pass scaled blur value
+                    .mask(CustomMaskShape(cornerRadius: 20, blurRadius: CGFloat(12 - (sliderValue * 20)))
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                         .edgesIgnoringSafeArea(.all))
             }
-            VStack{
+
+            VStack {
                 Spacer()
                 Spacer()
                 Spacer()
                 if overlayVisible {
                     Slider(value: $sliderValue, in: 0.0...0.6, step: 0.03)
                         .padding()
-    //                    .background(Color.white.opacity(0.5))
-    //                    .cornerRadius(10)
                         .padding(.horizontal)
                         .padding(.bottom, 30)
                         .tint(.white)
                 }
             }
-            
+
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
-                    
+
                     ZStack {
                         Circle()
                             .fill(isButtonPressed ? Color.white.opacity(0.1) : Color.white.opacity(0.3))
                             .frame(width: 90, height: 90)
                             .animation(.easeInOut(duration: 0.1), value: isButtonPressed)
-                        
+
                         Circle()
                             .stroke(Color.white, lineWidth: 4)
                             .frame(width: 85, height: 85)
                             .scaleEffect(isButtonPressed ? 0.9 : 1.0)
                             .animation(.easeInOut(duration: 0.1), value: isButtonPressed)
-                        
+
                         Circle()
                             .fill(isButtonPressed ? Color.white.opacity(0.3) : Color.white.opacity(0.5))
                             .frame(width: 70, height: 70)
@@ -102,12 +99,10 @@ struct CameraViewWrapper: View {
                                     isButtonPressed = true
                                     overlayVisible = false
                                 }
-                                // Simulate a short delay for the button press visual feedback
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     withAnimation {
                                         isButtonPressed = false
                                     }
-                                    // Capture photo action
                                     viewModel.capturePhoto()
                                     showingPreview = true
                                     print("Photo captured")
@@ -116,27 +111,26 @@ struct CameraViewWrapper: View {
                     }
                     Spacer()
                 }.padding(.bottom, 100)
-                
-                
             }
-            
-            VStack{
+
+            VStack {
                 Spacer()
-                HStack{
-                    Button(action: { //FEED BUTTON
+                HStack {
+                    Button(action: {
                         showingUserListView = true
-                    }){
+                    }) {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.white)
                             .padding()
                             .background(Color.black.opacity(0.5))
                             .clipShape(Circle())
-                            .frame(width: 60, height: 60)}
-                    
+                            .frame(width: 60, height: 60)
+                    }
                     .sheet(isPresented: $showingUserListView) {
-                                        UsersListView()
-                                    }
-                    Button(action: { //Account Button!!!
+                        UsersListView()
+                    }
+
+                    Button(action: {
                         showingAccountInfo.toggle()
                     }) {
                         Image(systemName: "ellipsis")
@@ -146,11 +140,10 @@ struct CameraViewWrapper: View {
                             .clipShape(Circle())
                             .frame(width: 60, height: 60)
                     }
-                    //Spacer()   //EXTRA
                     
                     Spacer()
                     
-                    Button(action: { //Overlay Button!!!
+                    Button(action: {
                         if overlayVisible {
                             withAnimation {
                                 overlayVisible = false
@@ -168,8 +161,6 @@ struct CameraViewWrapper: View {
                                 }
                             }
                         }
-                    
-                        // Future functionality action
                     }) {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.white)
@@ -178,28 +169,20 @@ struct CameraViewWrapper: View {
                             .clipShape(Circle())
                             .frame(width: 60, height: 60)
                     }
-//                    Button(action: {
-//                        if let user = Auth.auth().currentUser {
-//                            gifCreator.createAndUploadGif(for: user.uid) { success in
-//                                if success {
-//                                    print("Post GIF created and uploaded successfully")
-//                                } else {
-//                                    print("Failed to create and upload post GIF")
-//                                }
-//                            }
-//                        }
-//                    }) {
-//                        Image(systemName: "ellipsis")
-//                            .foregroundColor(.white)
-//                            .padding()
-//                            .background(Color.black.opacity(0.5))
-//                            .clipShape(Circle())
-//                            .frame(width: 60, height: 60)
-//                    }
                     
+                    //Spacer()
+                    
+                    Button(action: createGif) {
+                        Image(systemName: "ellipsis")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.black.opacity(0.5))
+                            .clipShape(Circle())
+                            .frame(width: 60, height: 60)
+                    }
                 }.padding(.bottom, 110)
-                // Adjust bottom padding to position the buttons
             }
+
             if showingAccountInfo {
                 Color.black.opacity(0.5)
                     .edgesIgnoringSafeArea(.all)
@@ -209,7 +192,7 @@ struct CameraViewWrapper: View {
                     .transition(.move(edge: .bottom))
             }
         }
-        .sheet(isPresented: $showingPreview) {  //The presentation of this needs to change
+        .sheet(isPresented: $showingPreview) {
             if let capturedImage = viewModel.capturedImage {
                 PhotoPreviewView(image: capturedImage, onSave: {
                     viewModel.savePhoto(capturedImage)
@@ -220,10 +203,119 @@ struct CameraViewWrapper: View {
                 })
             }
         }
+//        .overlay(
+//            VStack {
+//                if creatingGif {
+//                    ProgressView("Creating GIF...")
+//                }
+//                if let errorMessage = errorMessage {
+//                    Text(errorMessage)
+//                        .foregroundColor(.red)
+//                        .padding()
+//                }
+//                Button(action: createGif) {
+//                    Text("Create Post GIF")
+//                        .padding()
+//                        .background(Color.green)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(10)
+//                }
+//                .padding()
+//                Spacer()
+//            }, alignment: .bottom
+//        )
+    }
+
+    func createGif() {
+        guard let user = Auth.auth().currentUser else { return }
+        creatingGif = true
+        errorMessage = nil
+
+        let storageRef = Storage.storage().reference().child("users/\(user.uid)/images")
         
+        func listImages(retryCount: Int = 0) {
+            storageRef.listAll { (result, error) in
+                if let error = error {
+                    if retryCount < 3 {
+                        // Retry after a delay if an error occurs
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            listImages(retryCount: retryCount + 1)
+                        }
+                    } else {
+                        errorMessage = "Too many retries, please try again later. Error: \(error.localizedDescription)"
+                        creatingGif = false
+                    }
+                    return
+                }
+
+                guard let result = result else {
+                    errorMessage = "Error: listAll result is nil"
+                    creatingGif = false
+                    return
+                }
+
+                let imageRefs = result.items
+                var images: [UIImage] = []
+                
+                let group = DispatchGroup()
+
+                func fetchImageData(ref: StorageReference) {
+                    group.enter()
+                    ref.getData(maxSize: 5 * 1024 * 1024) { data, error in
+                        if let error = error {
+                            print("Error fetching image data: \(error.localizedDescription)")
+                        } else if let data = data, let image = UIImage(data: data) {
+                            images.append(image)
+                        }
+                        group.leave()
+                    }
+                }
+                
+                for ref in imageRefs {
+                    fetchImageData(ref: ref)
+                }
+
+                group.notify(queue: .main) {
+                    if images.isEmpty {
+                        errorMessage = "No images found to create GIF"
+                        creatingGif = false
+                        return
+                    }
+
+                    if let gifData = Utility.createGif(from: images) {
+                        let gifRef = Storage.storage().reference().child("users/\(user.uid)/post/post.gif")
+                        gifRef.putData(gifData, metadata: nil) { _, error in
+                            creatingGif = false
+                            if let error = error {
+                                errorMessage = "Error uploading GIF: \(error.localizedDescription)"
+                            } else {
+                                errorMessage = "GIF uploaded successfully"
+                            }
+                        }
+                    } else {
+                        errorMessage = "Error creating GIF"
+                        creatingGif = false
+                    }
+                }
+            }
+        }
         
+        listImages()
     }
 }
+
+
+    
+//    func processGifs() {
+//            guard let userId = Auth.auth().currentUser?.uid else { return }
+//            isProcessingGifs = true
+//            let gifCreator = GifCreator()
+//            gifCreator.processAllUsers {
+//                isProcessingGifs = false
+//                print("All GIFs processed and uploaded.")
+//            }
+//        }
+
 struct CustomMaskShape: View {
     var cornerRadius: CGFloat
     var blurRadius: CGFloat

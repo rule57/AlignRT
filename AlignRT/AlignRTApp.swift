@@ -11,6 +11,14 @@ import Firebase
 @main
 struct AlignRTApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+//    init() {
+//        FirebaseApp.configure()
+//        
+//        let gifCreator = GifCreator()
+//        gifCreator.processAllUsers {
+//            print("All user GIFs processed.")
+//        }
+//    }
 
     var body: some Scene {
         WindowGroup {
@@ -25,5 +33,4 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
 }
-
 

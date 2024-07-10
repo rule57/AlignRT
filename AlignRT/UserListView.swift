@@ -6,75 +6,100 @@
 //
 import SwiftUI
 import Firebase
-import FirebaseFirestore
 import FirebaseStorage
+import SwiftyGif
 
 struct UsersListView: View {
     @State private var users: [User] = []
-    @State private var profileGifUrls: [String: String] = [:]
-    
+
     var body: some View {
-        VStack {
-            List(users) { user in
-                HStack {
-                    if let urlString = profileGifUrls[user.id ?? ""], let url = URL(string: urlString) {
-                        GifImage(gifUrl: url)
-                            .frame(width: 50, height: 50)
-                            .clipShape(Circle())
+        ScrollView {
+            VStack {
+                ForEach(users) { user in
+                    VStack {
+                        HStack {
+                            if let profileGifUrl = user.profileGifUrl {
+                                GifImage(gifUrl: profileGifUrl)
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                    .shadow(radius: 10)
+                            } else {
+                                Circle()
+                                    .fill(Color.gray)
+                                    .frame(width: 50, height: 50)
+                            }
+                            Text(user.username)
+                                .font(.headline)
+                        }
+                        .padding()
+
+                        if let postGifUrl = user.postGifUrl {
+                            GifImage(gifUrl: postGifUrl)
+                                .frame(width: 300, height: 300)
+                                .cornerRadius(20)
+                        } else {
+                            Rectangle()
+                                .fill(Color.gray.opacity(0.3))
+                                .frame(width: 300, height: 300)
+                                .cornerRadius(20)
+                        }
                     }
-                    Text(user.username)
+                    .padding()
                 }
             }
-            .onAppear {
-                fetchUsers()
-            }
+        }
+        .onAppear {
+            fetchUsers()
         }
     }
-    
-    private func fetchUsers() {
+
+    func fetchUsers() {
         let db = Firestore.firestore()
-        db.collection("users").getDocuments { snapshot, error in
+        db.collection("users").getDocuments { (snapshot, error) in
             if let error = error {
-                print("Error fetching users: \(error.localizedDescription)")
+                print("Error getting documents: \(error)")
                 return
             }
-            if let snapshot = snapshot {
-                self.users = snapshot.documents.compactMap { doc -> User? in
-                    try? doc.data(as: User.self)
-                }
-                fetchProfileGifs()
+            
+            guard let documents = snapshot?.documents else {
+                print("Error: documents are nil")
+                return
             }
-        }
-    }
-    
-    private func fetchProfileGifs() {
-        let storage = Storage.storage()
-        
-        for user in users {
-            guard let userId = user.id else { continue }
-            let gifRef = storage.reference().child("users/\(userId)/profile_gif/profile.gif")
-            gifRef.downloadURL { url, error in
-                if let error = error {
-                    print("Error fetching profile gif URL: \(error.localizedDescription)")
-                    return
-                }
-                if let url = url {
-                    DispatchQueue.main.async {
-                        self.profileGifUrls[userId] = url.absoluteString
+
+            var fetchedUsers: [User] = []
+            let group = DispatchGroup()
+
+            for document in documents {
+                let data = document.data()
+                let username = data["username"] as? String ?? ""
+                let profileGifUrlString = data["profileGifUrl"] as? String
+                let postGifUrlString = data["postGifUrl"] as? String
+
+                var user = User(
+                    id: document.documentID,
+                    username: username,
+                    profileGifUrl: URL(string: profileGifUrlString ?? ""),
+                    postGifUrl: URL(string: postGifUrlString ?? "")
+                )
+
+                if user.postGifUrl == nil {
+                    group.enter()
+                    let storageRef = Storage.storage().reference().child("users/\(user.id)/post/post.gif")
+                    storageRef.downloadURL { url, error in
+                        if let url = url {
+                            user.postGifUrl = url
+                        }
+                        group.leave()
                     }
                 }
+
+                fetchedUsers.append(user)
+            }
+
+            group.notify(queue: .main) {
+                self.users = fetchedUsers
             }
         }
-    }
-}
-
-struct User: Identifiable, Codable {
-    @DocumentID var id: String?
-    var username: String
-}
-
-struct UsersListView_Previews: PreviewProvider {
-    static var previews: some View {
-        UsersListView()
     }
 }

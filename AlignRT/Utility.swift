@@ -100,6 +100,9 @@ import MobileCoreServices
 
 
 class Utility {
+    /// Creates a GIF from an array of `UIImage` objects.
+    /// - Parameter images: An array of `UIImage` objects.
+    /// - Returns: `Data` representing the GIF or `nil` if the creation fails.
     static func createGif(from images: [UIImage]) -> Data? {
         guard !images.isEmpty else { return nil }
         
@@ -114,7 +117,7 @@ class Utility {
             ]
         ]
         
-        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("profile.gif")
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("animated.gif")
         
         guard let destination = CGImageDestinationCreateWithURL(fileURL as CFURL, kUTTypeGIF, images.count, nil) else { return nil }
         
@@ -132,6 +135,9 @@ class Utility {
         return try? Data(contentsOf: fileURL)
     }
     
+    /// Fixes the orientation of a `UIImage`.
+    /// - Parameter image: The `UIImage` to be fixed.
+    /// - Returns: A new `UIImage` with the corrected orientation.
     static func fixOrientation(_ image: UIImage) -> UIImage {
         guard image.imageOrientation != .up else { return image }
         
@@ -180,3 +186,4 @@ class Utility {
         return UIImage(cgImage: newCgImage)
     }
 }
+
