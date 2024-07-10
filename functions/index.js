@@ -1,25 +1,26 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const {Storage} = require("@google-cloud/storage");
-const {createGif} = require("./gif_creator"); // Import the GIF creator module
+const {createGif} = require("./gif_creator"); //
 
 admin.initializeApp();
 const storage = new Storage();
 
-exports.createGifFromUserImages = functions.https.onRequest(async (req, res) => {
-  const userId = req.query.userId; // Assuming userId is passed as a query parameter
-
-  try {
-    const imagePaths = await getUserImages(userId);
-    const gifPath = `/tmp/${userId}.gif`;
-    await createGif(imagePaths, gifPath);
-    await uploadGif(gifPath);
-    res.status(200).send("GIF created and uploaded successfully");
-  } catch (error) {
-    console.error("Error creating GIF:", error);
-    res.status(500).send("Error creating GIF");
-  }
-});
+exports.createGifFromUserImages = functions.https.onRequest(
+    async (req, res) => {
+      const userId = req.query.userId;
+      try {
+        const imagePaths = await getUserImages(userId);
+        const gifPath = `/tmp/${userId}.gif`;
+        await createGif(imagePaths, gifPath);
+        await uploadGif(gifPath);
+        res.status(200).send("GIF created and uploaded successfully");
+      } catch (error) {
+        console.error("Error creating GIF: ", error);
+        res.status(500).send("Error creating GIF");
+      }
+    },
+);
 
 /**
  * Fetches user images from Cloud Storage.
