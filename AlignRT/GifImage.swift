@@ -1,93 +1,47 @@
-//
-//  PlaceHolder.swift
-//  AlignRT
-//
-//  Created by William Rule on 7/4/24.
-//
-//import SwiftUI
-//import SwiftyGif
-//
-//struct GifImage: UIViewRepresentable {
-//    let gifUrl: URL
-//    
-//    func makeUIView(context: Context) -> UIView {
-//        let container = UIView()
-//        let imageView = UIImageView(gifURL: gifUrl)  // Use the gifURL initializer directly
-//        
-//        imageView.contentMode = .scaleAspectFill
-//        imageView.clipsToBounds = true
-//        
-//        container.addSubview(imageView)
-//        
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            imageView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-//            imageView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-//            imageView.topAnchor.constraint(equalTo: container.topAnchor),
-//            imageView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-//        ])
-//        
-//        return container
-//    }
-//    
-//    func updateUIView(_ uiView: UIView, context: Context) {
-//        if let imageView = uiView.subviews.first as? UIImageView {
-//            do {
-//                let gif = try UIImage(gifData: Data(contentsOf: gifUrl))
-//                imageView.setGifImage(gif, loopCount: -1)
-//            } catch {
-//                print("Error updating gif image: \(error)")
-//            }
-//        }
-//    }
-//}
 import SwiftUI
 import SwiftyGif
 
-struct GifImage: UIViewRepresentable {
+struct GifImage: View {
     let gifUrl: URL
-    
-    func makeUIView(context: Context) -> UIView {
-        let container = UIView()
-        let imageView = UIImageView()
-        
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        container.addSubview(imageView)
-        
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: container.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-        ])
-        
-        loadGifAsync(for: imageView)
-        
-        return container
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
-        if let imageView = uiView.subviews.first as? UIImageView {
-            loadGifAsync(for: imageView)
+    @StateObject private var gifLoader = GifLoader()
+
+    var body: some View {
+        Group {
+            if let gifData = gifLoader.gifData {
+                GifImageView(gifData: gifData)
+                    .onAppear {
+                        print("GifImageView onAppear called")
+                    }
+            } else {
+                ProgressView()
+                    .onAppear {
+                        print("ProgressView onAppear called, starting GIF load")
+                        gifLoader.loadGif(from: gifUrl)
+                    }
+            }
         }
     }
-    
-    private func loadGifAsync(for imageView: UIImageView) {
-        URLSession.shared.dataTask(with: gifUrl) { data, response, error in
-            guard let data = data, error == nil else {
-                print("Error loading gif: \(String(describing: error))")
-                return
-            }
-            DispatchQueue.main.async {
-                do {
-                    let gif = try UIImage(gifData: data)
-                    imageView.setGifImage(gif, loopCount: -1)
-                } catch {
-                    print("Error setting gif image: \(error)")
-                }
-            }
-        }.resume()
+}
+
+struct GifImageView: UIViewRepresentable {
+    let gifData: Data
+
+    func makeUIView(context: Context) -> UIImageView {
+        print("Creating UIImageView for GIF")
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }
+
+    func updateUIView(_ uiView: UIImageView, context: Context) {
+        do {
+            print("Setting GIF data to image view")
+            let gif = try UIImage(gifData: gifData)
+            uiView.setGifImage(gif, loopCount: -1)
+            print("GIF image set successfully")
+        } catch {
+            print("Error setting gif image: \(error)")
+        }
     }
 }

@@ -1,9 +1,3 @@
-//
-//  UserListView.swift
-//  AlignRT
-//
-//  Created by William Rule on 7/5/24.
-//
 import SwiftUI
 import Firebase
 import FirebaseStorage
@@ -18,12 +12,14 @@ struct UsersListView: View {
                 ForEach(users) { user in
                     VStack {
                         HStack {
-                            if let profileGifUrl = user.profileGifUrl {
-                                GifImage(gifUrl: profileGifUrl)
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                                    .shadow(radius: 10)
+                            if let profileGifData = user.profileGifData {
+                                ProGifImage(gifData: profileGifData) {
+                                    // Optional: Add any tap action here if needed
+                                }
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                .shadow(radius: 10)
                             } else {
                                 Circle()
                                     .fill(Color.gray)
@@ -34,10 +30,12 @@ struct UsersListView: View {
                         }
                         .padding()
 
-                        if let postGifUrl = user.postGifUrl {
-                            GifImage(gifUrl: postGifUrl)
-                                .frame(width: 300, height: 300)
-                                .cornerRadius(20)
+                        if let postGifData = user.postGifData {
+                            ProGifImage(gifData: postGifData) {
+                                // Optional: Add any tap action here if needed
+                            }
+                            .frame(width: 300, height: 300)
+                            .cornerRadius(20)
                         } else {
                             Rectangle()
                                 .fill(Color.gray.opacity(0.3))
@@ -73,33 +71,74 @@ struct UsersListView: View {
             for document in documents {
                 let data = document.data()
                 let username = data["username"] as? String ?? ""
-                let profileGifUrlString = data["profileGifUrl"] as? String
-                let postGifUrlString = data["postGifUrl"] as? String
 
                 var user = User(
                     id: document.documentID,
                     username: username,
-                    profileGifUrl: URL(string: profileGifUrlString ?? ""),
-                    postGifUrl: URL(string: postGifUrlString ?? "")
+                    profileGifData: nil,
+                    postGifData: nil
                 )
 
-                if user.postGifUrl == nil {
-                    group.enter()
-                    let storageRef = Storage.storage().reference().child("users/\(user.id)/post/post.gif")
-                    storageRef.downloadURL { url, error in
-                        if let url = url {
-                            user.postGifUrl = url
-                        }
-                        group.leave()
+                fetchedUsers.append(user)
+                let userId = user.id
+
+                group.enter()
+                fetchGifData(for: userId, type: .profile) { gifData in
+                    if let index = fetchedUsers.firstIndex(where: { $0.id == userId }) {
+                        fetchedUsers[index].profileGifData = gifData
+                        print("Fetched profile GIF data for user \(userId): \(String(describing: gifData?.count)) bytes")
                     }
+                    group.leave()
                 }
 
-                fetchedUsers.append(user)
+                group.enter()
+                fetchGifData(for: userId, type: .post) { gifData in
+                    if let index = fetchedUsers.firstIndex(where: { $0.id == userId }) {
+                        fetchedUsers[index].postGifData = gifData
+                        print("Fetched post GIF data for user \(userId): \(String(describing: gifData?.count)) bytes")
+                    }
+                    group.leave()
+                }
             }
 
             group.notify(queue: .main) {
                 self.users = fetchedUsers
+                for user in self.users {
+                    print("User \(user.username) - Profile GIF: \(String(describing: user.profileGifData?.count)) bytes, Post GIF: \(String(describing: user.postGifData?.count)) bytes")
+                }
             }
         }
     }
+
+    enum GifType {
+        case profile
+        case post
+    }
+
+    func fetchGifData(for userId: String, type: GifType, completion: @escaping (Data?) -> Void) {
+        let path: String
+        switch type {
+        case .profile:
+            path = "users/\(userId)/profile_gif/profile.gif"
+        case .post:
+            path = "users/\(userId)/gif/\(userId).gif"
+        }
+        
+        let storageRef = Storage.storage().reference().child(path)
+        storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+            if let error = error {
+                print("Error loading \(type) gif for user \(userId): \(error.localizedDescription)")
+                completion(nil)
+            } else {
+                completion(data)
+            }
+        }
+    }
+}
+
+struct User: Identifiable {
+    var id: String
+    var username: String
+    var profileGifData: Data?
+    var postGifData: Data?
 }

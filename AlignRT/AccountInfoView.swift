@@ -177,6 +177,7 @@ struct ProGifImage: UIViewRepresentable {
         do {
             let gif = try UIImage(gifData: gifData)
             imageView.setGifImage(gif, loopCount: -1)
+            print("GIF image set successfully with data size: \(gifData.count) bytes")
         } catch {
             print("Error creating gif image: \(error)")
         }
@@ -206,6 +207,7 @@ struct ProGifImage: UIViewRepresentable {
             do {
                 let gif = try UIImage(gifData: gifData)
                 imageView.setGifImage(gif, loopCount: -1)
+                print("GIF image updated successfully with data size: \(gifData.count) bytes")
             } catch {
                 print("Error updating gif image: \(error)")
             }
