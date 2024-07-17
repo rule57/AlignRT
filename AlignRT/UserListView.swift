@@ -125,12 +125,20 @@ struct UsersListView: View {
         }
         
         let storageRef = Storage.storage().reference().child(path)
-        storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+        let localURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(userId)-\(type).gif")
+
+        storageRef.write(toFile: localURL) { url, error in
             if let error = error {
                 print("Error loading \(type) gif for user \(userId): \(error.localizedDescription)")
                 completion(nil)
-            } else {
-                completion(data)
+            } else if let url = url {
+                do {
+                    let gifData = try Data(contentsOf: url)
+                    completion(gifData)
+                } catch {
+                    print("Error reading downloaded \(type) gif for user \(userId): \(error.localizedDescription)")
+                    completion(nil)
+                }
             }
         }
     }

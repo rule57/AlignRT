@@ -67,7 +67,8 @@ class CameraViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate
         }
 
         let userID = user.uid
-        let fileName = UUID().uuidString + ".jpg"
+        let timestamp = Int(Date().timeIntervalSince1970)
+        let fileName = "\(timestamp)_\(UUID().uuidString).jpg"
         let storageRef = Storage.storage().reference().child("users/\(userID)/images/\(fileName)")
 
         storageRef.putData(imageData, metadata: nil) { metadata, error in
