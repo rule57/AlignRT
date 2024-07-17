@@ -30,7 +30,7 @@ async function createGif(imagePaths, outputPath) {
 
   encoder.start();
   encoder.setRepeat(0); // 0 for repeat, -1 for no-repeat
-  encoder.setDelay(500); // frame delay in ms
+  encoder.setDelay(300); // frame delay in ms
   encoder.setQuality(10); // image quality. 10 is default.
 
   const canvas = createCanvas(oHeight, oWidth); // Sw
